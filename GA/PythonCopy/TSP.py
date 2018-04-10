@@ -22,12 +22,13 @@ class Graph:
 def ask_distance(a,b):
     return math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))
 
-def ask_sum_distance(list_x):
+def ask_sum_distance(list_x,graph):
     i = 1
     list_len = len(list_x)
     sum = 0.0
     while i < list_len:
-        sum += ask_distance(list_x[i-1],list_x[i])
+        sum += ask_distance(graph.points[list_x[i-1]],graph.points[list_x[i]])
+        i += 1
     return sum
 
 def cmp_list(list_a,list_b):

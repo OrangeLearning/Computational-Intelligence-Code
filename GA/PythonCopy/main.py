@@ -1,6 +1,7 @@
 from GeneticAlgorithmBasic import BasicNode
 from GeneticAlgorithmBasic import BasicGroup
 
+import GeneticAlgorithmTool as gat
 from TSP import Graph
 from TSP import Point
 import TSP
@@ -21,8 +22,8 @@ def random_vector(n):
 
     return vec
 
-def random_node(n):
-    return BasicNode(n,random_vector(n),TSP.ask_sum_distance)
+def random_node(graph,n):
+    return BasicNode(n,random_vector(n),graph,TSP.ask_sum_distance)
 
 
 def build_graph():
@@ -42,21 +43,29 @@ def build_graph():
     return graph,gs
 
 def main():
+    random.seed(time.time())
     # 构造图
     graph,gs = build_graph()
 
     GA_NUM = 50
     GA_TIMES = 100
+    GA_MUTE = 0.1
     """
         准备开始搜索
         
         实际就是得到一种排列
     """
     group = BasicGroup(GA_NUM)
-    for i in range(GA_NUM):
-        group.add_Node(random_node(graph.point_n))
 
-    group.genetic_algorithm(GA_TIMES,TSP.cmp_list)
+    print("start ga")
+
+    print("init")
+    for i in range(GA_NUM):
+        group.add_Node(random_node(graph,graph.point_n))
+        print(group.group_n)
+    
+    group.genetic_algorithm(GA_TIMES,GA_MUTE,TSP.cmp_list,gat.my_exchange,gat.my_mutate,group.group_n)
+
 
 
 if __name__ == '__main__':
