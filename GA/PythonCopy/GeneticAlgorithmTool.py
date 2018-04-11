@@ -1,3 +1,7 @@
+"""
+    This is the GA Tool file
+"""
+from GeneticAlgorithmBasic import BasicNode
 import copy
 import random
 
@@ -15,6 +19,7 @@ def my_mutate(list_x):
     while w == u or w == v:
         w = random.randint(0,list_n - 1)
 
+    # print("u,v,w = ",u,v,w)
     if u > v:
         u,v = v,u
     if v > w:
@@ -22,65 +27,81 @@ def my_mutate(list_x):
     if u > w:
         u,w = w,u
 
+    # print("u,v,w = ",u,v,w)
     """
+        0~u u~v v~w w~n
         变异为：
         0~u v~w u~v w~n
     """
+    # print(new_list)
     for i in range(0,u):
         new_list.append(list_x[i])
+
+    # print(new_list)
     for i in range(v,w):
         new_list.append(list_x[i])
+
+    # print(new_list)
     for i in range(u,v):
         new_list.append(list_x[i])
+
+    # print(new_list)
     for i in range(w,list_n):
         new_list.append(list_x[i])
 
+    # print(new_list)
     return new_list
 
 # 交叉
-def my_exchange(group,vector_n):
+def my_exchange(group,group_n,vector_n):
+    # print("len = ",len(group)," group_n = ",group_n)
+
     new_group = []
-    GA_DIV = random.randint(0,vector_n - 1)
+    GA_DIV = random.randint(0,group_n - 1)
 
-    for k in range(0,group.group_n,step=2):
-        if k + 1 >= group.group_n:
+    for k in range(GA_DIV,group_n,2):
+        if k + 1 >= group_n-2:
             break
-
         # 交叉的两个变量
-        node_u = group[k]
-        node_v = group[k+1]
+        node_u = group[k % group_n]
+        node_v = group[(k + 1) % group_n]
+        index_u = random.randint(0,vector_n-1)
+        index_v = random.randint(0,vector_n-1)
+        while index_u == index_v:
+            index_v = random.randint(0,vector_n-1)
 
-        for i in range(GA_DIV,vector_n):
-            node_u.vector[i],node_v.vector[i] = node_v.vector[i],node_v.vector[i]
+        if index_u > index_v:
+            index_u,index_v = index_v,index_u
 
-        # 下面解决冲突：
-        cnt_u = [0 for i in range(0,vector_n)]
-        cnt_v = [0 for i in range(0,vector_n)]
+        tmp_v = node_v.vector[index_u:index_v]
+        tmp_u = node_u.vector[index_u:index_v]
+        len_u = len_v = 0
 
-        for i in range(0,vector_n):
-            cnt_u[node_u.vector[i]] += 1
-            cnt_v[node_v.vector[i]] += 1
+        new_u = copy.copy(node_u)
+        new_u.vector = []
+        new_v = copy.copy(node_v)
+        new_v.vector = []
 
+        for item in node_u.vector:
+            if len_u == index_u:
+                new_u.vector.extend(tmp_u)
+                len_u += 1
+            if item not in tmp_u:
+                new_u.vector.append(item)
+                len_u += 1
 
-        uu = []
-        vv = []
+        for item in node_v.vector:
+            if len_v == index_u:
+                new_v.vector.extend(tmp_v)
+                len_v += 1
+            if item not in tmp_v:
+                new_v.vector.append(item)
+                len_v += 1
+        new_group.append(new_u)
+        new_group.append(new_v)
 
-        for i in range(0,vector_n):
-            if cnt_u[i] == 2:
-                uu.append(node_u.vector[i])
-            if cnt_v[i] == 2:
-                vv.append(node_v.vector[i])
-
-        pu = pv = 0
-        for i in range(0,vector_n):
-            if cnt_u[node_u.vector[i]] == 2:
-                node_u.vector[i] = vv[pv]
-                pv += 1
-            if cnt_v[node_v.vector[i]] == 2:
-                node_v.vector[i] = uu[pu]
-                pu += 1
-
-        new_group.append(node_u)
-        new_group.append(node_v)
-    
+    for item in group:
+        if len(new_group) == group_n:
+            break
+        new_group.append(item)
     return new_group

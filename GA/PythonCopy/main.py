@@ -1,6 +1,7 @@
 from GeneticAlgorithmBasic import BasicNode
 from GeneticAlgorithmBasic import BasicGroup
 
+
 import GeneticAlgorithmTool as gat
 from TSP import Graph
 from TSP import Point
@@ -17,6 +18,8 @@ def random_vector(n):
 
     for i in range(n):
         tt = random.randint(0,n-1)
+        while tt == i:
+            tt = random.randint(0,n-1)
         vec[i],vec[tt] = vec[tt],vec[i]
     print(vec)
 
@@ -31,6 +34,8 @@ def build_graph():
     with open("data.in","r") as f:
         lists = f.readlines()
         for item in lists:
+            if item[0] == "#":
+                break
             ss = item.split(" ")
             graph.add_point(Point(float(ss[1]),float(ss[2]),ss[0]))
 
@@ -50,6 +55,7 @@ def main():
     GA_NUM = 50
     GA_TIMES = 100
     GA_MUTE = 0.1
+    
     """
         准备开始搜索
         
@@ -63,10 +69,18 @@ def main():
     for i in range(GA_NUM):
         group.add_Node(random_node(graph,graph.point_n))
         print(group.group_n)
-    
-    group.genetic_algorithm(GA_TIMES,GA_MUTE,TSP.cmp_list,gat.my_exchange,gat.my_mutate,group.group_n)
 
-
+    print("------------------")
+    ans = group.genetic_algorithm(GA_TIMES=GA_TIMES,
+                            GA_MUTE=GA_MUTE,
+                            ask_fitness=TSP.ask_sum_distance,
+                            exchange=gat.my_exchange,
+                            mutate=gat.my_mutate,
+                            graph=graph,
+                            vector_n=graph.point_n)
+    print("------------ans--------------")
+    print(ans.fitness)
+    # group.genetic_algorithm(GA_TIMES,GA_MUTE,TSP.cmp_list,gat.my_exchange,gat.my_mutate,group.group_n)
 
 if __name__ == '__main__':
     main()
