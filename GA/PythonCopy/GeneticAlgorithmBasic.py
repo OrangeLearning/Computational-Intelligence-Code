@@ -26,7 +26,6 @@ class BasicGroup:
     def add_Node(self,node):
         self.groups.append(node)
 
-
     """
         通用的遗传算法
             GA_TIMES 就是设置迭代次数
@@ -42,7 +41,6 @@ class BasicGroup:
         self.groups.sort(key=lambda x:(x.fitness))
         # 迭代次数
         for time_i in range(GA_TIMES):
-
             print("time_i = ",time_i," ans = ",self.groups[0].fitness)
             for item in self.groups:
                 print(item.fitness,end=" ")

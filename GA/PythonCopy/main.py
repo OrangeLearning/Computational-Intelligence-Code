@@ -1,7 +1,6 @@
 from GeneticAlgorithmBasic import BasicNode
 from GeneticAlgorithmBasic import BasicGroup
 
-
 import GeneticAlgorithmTool as gat
 from TSP import Graph
 from TSP import Point
