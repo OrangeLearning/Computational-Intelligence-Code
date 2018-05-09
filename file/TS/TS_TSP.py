@@ -152,40 +152,39 @@ class TS:
                     self.tuba_table.remove(new_res[0]["plan"])
                 init_plan = copy.copy(new_res[0]["plan"])
 
-            # print(better_plan)
+            print(better_plan)
             ans_each.append(better_plan["fitness"])
             i_time += 1
         print(better_plan)
         return better_plan, ans_each
 
 
-def main(max_time=10000, max_size=100):
+def main(max_time=100, max_size=10):
     graph = Graph(0)
-    with open("in1.txt", "r") as f:
+    with open("in.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
             line = str(line)
             # print(line)
             items = line.split(' ')
-            x = float(items[0])
-            y = float(items[1])
+            x = float(items[1])
+            y = float(items[2])
             # print('x =',x,' y = ',y)
             graph.add_point(Point(x, y))
 
     ts = TS(max_time, max_size)
     res, ans = ts.run(graph.point_n, graph)
 
-    print(res)
-    x_s = []
-    y_s = []
-    for i in res["plan"]:
-        x_s.append(graph.points[i].x)
-        y_s.append(graph.points[i].y)
-
-    x_s.append(x_s[0])
-    y_s.append(y_s[0])
-    mpl.plot(x_s, y_s)
-    mpl.show()
+    # x_s = []
+    # y_s = []
+    # for i in res["plan"]:
+    #     x_s.append(graph.points[i].x)
+    #     y_s.append(graph.points[i].y)
+    #
+    # x_s.append(x_s[0])
+    # y_s.append(y_s[0])
+    # mpl.plot(x_s, y_s)
+    # mpl.show()
 
     # mpl.plot(ans)
     # mpl.show()
@@ -193,11 +192,10 @@ def main(max_time=10000, max_size=100):
 
 
 if __name__ == '__main__':
-    # max_sizes = [1, 2, 3, 4, 5, 6,7,8,9,10,12,15,16,18,20,22,25,27,30]
-    # s = []
-    # for max_size in max_sizes:
-    #     s.append(main(50,max_size))
-    # print(s)
-    # mpl.plot(max_sizes,s)
-    # mpl.show()
-    main()
+    max_sizes = [1, 2, 3, 4, 5, 6,7,8,9,10,12,15,16,18,20,22,25,27,30]
+    s = []
+    for max_size in max_sizes:
+        s.append(main(50,max_size))
+    print(s)
+    mpl.plot(max_sizes,s)
+    mpl.show()

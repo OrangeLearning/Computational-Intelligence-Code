@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Tue May  1 02:11:26 2018
@@ -137,50 +137,46 @@ class SA:
 
 def main(L = 100,q = 0.98):
     graph = Graph(0)
-    with open("in1.txt","r") as f:
+    with open("in.txt","r") as f:
         lines = f.readlines()
         for line in lines:
             line = str(line)
             # print(line)
             items = line.split(' ')
-            x = float(items[0])
-            y = float(items[1])
+            x = float(items[1])
+            y = float(items[2])
             # print('x =',x,' y = ',y)
             graph.add_point(Point(x,y))
-    # print(graph.ask_distance_for_plan([2, 10, 1, 6, 13, 3, 11, 15, 19, 7, 16, 8, 12, 18, 5, 14, 17, 4, 9, 0]))
-    # 228.53435163448844
-    # return
     sa = SA(100000,10,L,q)
     res,T_s,best_ans = sa.run(graph.point_n,graph)
 
-    # return res["fitness"]
+    return res["fitness"]
     # 展示退火结果：
     # mpl.plot(T_s,best_ans)
     # mpl.show()
 
     # 结果展示
-    x_s = []
-    y_s = []
-    for i in res["plan"]:
-        x_s.append(graph.points[i].x)
-        y_s.append(graph.points[i].y)
-    x_s.append(x_s[0])
-    y_s.append(y_s[0])
-    mpl.plot(x_s,y_s,marker='o')
-    mpl.show()
+    # x_s = []
+    # y_s = []
+    # for i in res["plan"]:
+    #     x_s.append(graph.points[i].x)
+    #     y_s.append(graph.points[i].y)
+    # x_s.append(x_s[0])
+    # y_s.append(y_s[0])
+    # mpl.plot(x_s,y_s,marker='o')
+    # mpl.show()
 
 if __name__ == '__main__':
-    # L = [10,30,50,80,100,120,150,180,200,300,500]
-    # q = [item / 100.0 for item in range(75,99,1)]
-    # print(q)
-    # res = []
-    # # for ll in L:
-    # #     tmp = main(ll)
-    # #     res.append(tmp)
-    # for qq in q:
-    #     tmp = main(150,qq)
+    L = [10,30,50,80,100,120,150,180,200,300,500]
+    q = [item / 100.0 for item in range(75,99,1)]
+    print(q)
+    res = []
+    # for ll in L:
+    #     tmp = main(ll)
     #     res.append(tmp)
-    # mpl.plot(q,res)
-    # mpl.show()
-    # print(q)
-    main()
+    for qq in q:
+        tmp = main(150,qq)
+        res.append(tmp)
+    mpl.plot(q,res)
+    mpl.show()
+    print(q)

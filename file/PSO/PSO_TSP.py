@@ -66,7 +66,7 @@ def cmp_speed(a):
 
 
 class PSO:
-    def __init__(self, max_group=100, max_time=10000, c1=1, c2=1, eta=0.9, xi=0.85):
+    def __init__(self, max_group=100, max_time=1000, c1=1, c2=1, eta=0.9, xi=0.85):
         self.MAX_TIME = max_time
         self.MAX_GROUP = max_group
         self.c1 = c1
@@ -132,7 +132,7 @@ class PSO:
                     swarm_best["fitness"] = bird.best
                     swarm_best["plan"] = copy.copy(bird.plan)
 
-            print(swarm_best)
+            # print(swarm_best)
 
             temp_speed = []
 
@@ -183,50 +183,49 @@ class PSO:
 
 def main(eta=0.0, xi=0.0):
     graph = Graph(0)
-    with open("in1.txt", "r") as f:
+    with open("in.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
             line = str(line)
             # print(line)
             items = line.split(' ')
-            x = float(items[0])
-            y = float(items[1])
+            x = float(items[1])
+            y = float(items[2])
             # print('x =',x,' y = ',y)
             graph.add_point(Point(x, y))
 
-    pso = PSO()
+    pso = PSO(80, 800, 1, 1, eta=eta, xi=xi)
     res, ans = pso.run(graph.point_n, graph)
     # mpl.plot(ans)
     # mpl.show()
 
     # print(res)
-    x_s = []
-    y_s = []
-    for item in res["plan"]:
-        x_s.append(graph.points[item].x)
-        y_s.append(graph.points[item].y)
-    x_s.append(x_s[0])
-    y_s.append(y_s[0])
-    mpl.plot(x_s,y_s,marker='o')
-    mpl.show()
+    # x_s = []
+    # y_s = []
+    # for item in res["plan"]:
+    #     x_s.append(graph.points[item].x)
+    #     y_s.append(graph.points[item].y)
+    # x_s.append(x_s[0])
+    # y_s.append(y_s[0])
+    # mpl.plot(x_s,y_s,marker='o')
+    # mpl.show()
     print(res)
     return res["fitness"]
 
 
 if __name__ == '__main__':
-    # xi_s = [i / 100 for i in range(9,100,10)]
-    # eta_s = [i / 100 for i in range(9,100,10)]
-    # # main()
-    # z_s = []
-    # for xi in xi_s:
-    #     for eta in eta_s:
-    #         z_s.append(main(xi,eta))
-    #
-    # print(xi_s)
-    # print(eta_s)
-    # print(z_s)
-    # fig = mpl.figure()
-    # ax = Axes3D(fig)
-    # ax.plot_trisurf(xi_s,eta_s,z_s)
-    # mpl.show()
-    main()
+    xi_s = [i / 100 for i in range(9,100,10)]
+    eta_s = [i / 100 for i in range(9,100,10)]
+    # main()
+    z_s = []
+    for xi in xi_s:
+        for eta in eta_s:
+            z_s.append(main(xi,eta))
+
+    print(xi_s)
+    print(eta_s)
+    print(z_s)
+    fig = mpl.figure()
+    ax = Axes3D(fig)
+    ax.plot_trisurf(xi_s,eta_s,z_s)
+    mpl.show()

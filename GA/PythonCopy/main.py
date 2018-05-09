@@ -52,7 +52,7 @@ def main():
     graph,gs = build_graph()
 
     GA_NUM = 50
-    GA_TIMES = 100
+    GA_TIMES = 1000
     GA_MUTE = 0.1
     
     """
